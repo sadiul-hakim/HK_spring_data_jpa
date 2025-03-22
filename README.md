@@ -136,7 +136,7 @@ public class User {
     }
 
     @Override
-    public int hashCode() {
+    public Long hashCode() {
         return Objects.hash(email);
     }
 }
@@ -149,11 +149,11 @@ public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     User user = (User) o;
-    return id != null && id.equals(user.id);
+    return Objects.equals(id, user.id);
 }
 
 @Override
-public int hashCode() {
+public Long hashCode() {
     return Objects.hash(id);
 }
 ```
