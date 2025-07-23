@@ -73,3 +73,45 @@ DistinctCountries from the result of SELECT DISTINCT Country FROM Customers`
 | BETWEEN  | Between a certain range                         | `WHERE age BETWEEN 18 AND 30`   |
 | LIKE     | Search for a pattern                            | `WHERE name LIKE 'A%'`          |
 | IN       | Specify multiple values for a column            | `WHERE country IN ('US', 'UK')` |
+
+## Order By
+
+> SELECT * FROM Products ORDER BY Price;
+
+```sql
+SELECT column1,
+       column2, ...
+    FROM table_name
+ORDER BY column1, column2, ...ASC| DESC;
+```
+
+> SELECT * FROM Customers ORDER BY Country, CustomerName;
+
+## And
+
+```sql
+SELECT column1,
+       column2, ...
+    FROM table_name
+WHERE condition1 AND condition2 AND condition3...;
+```
+
+## Or
+
+```sql
+SELECT column1,
+       column2, ...
+    FROM table_name
+WHERE condition1 OR condition2 OR condition3...;
+```
+
+## Not
+
+```sql
+SELECT column1,
+       column2, ...
+    FROM table_name
+WHERE NOT condition;
+```
+
+> SELECT * FROM Customers WHERE CustomerName NOT LIKE '%A%' order by CustomerName asc;
