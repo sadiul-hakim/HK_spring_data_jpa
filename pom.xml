@@ -51,7 +51,7 @@
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
-			<scope>runtime</scope>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
@@ -60,6 +60,26 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.liquibase</groupId>
+				<artifactId>liquibase-maven-plugin</artifactId>
+				<version>4.29.2</version>
+				<configuration>
+					<url>jdbc:mysql://localhost:3306/jpa_course</url>
+					<username>root</username>
+					<password>hakim@123</password>
+<!--					<propertyFileWillOverride>true</propertyFileWillOverride>-->
+<!--					<propertyFile>target/classes/liquibase.properties</propertyFile>-->
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>com.mysql</groupId>
+						<artifactId>mysql-connector-j</artifactId>
+						<scope>runtime</scope>
+						<version>${mysql.version}</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 		</plugins>
 	</build>

@@ -16,6 +16,8 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        bookRepository.deleteAll();
+
         var javaProgramming = new Book("Java Programming", "A N M Bazlur Rahman", "1234");
         var javaThreadProgramming = new Book("Java Thread Programming", "A N M Bazlur Rahman", "12345");
         Book savedJavaBook = bookRepository.save(javaProgramming);

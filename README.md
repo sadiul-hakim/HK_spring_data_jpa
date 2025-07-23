@@ -1,6 +1,6 @@
 # JPA
 
-> Database <- SQL <- JDBC <- JPA (Hibernate) <- Spring Data JPA
+> Database <-> SQL <-> JDBC <-> JPA (Hibernate) <-> Spring Data JPA
 
 ## Entity
 
