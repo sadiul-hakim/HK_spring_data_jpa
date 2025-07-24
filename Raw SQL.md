@@ -238,9 +238,28 @@ Aggregate functions ignore null values (except for COUNT(*)).
 > select max(salary) as salary from customers;
 >
 > select min(salary) as salary from customers;
-> 
+>
 > select sum(salary) as salary from customers where salary > 20000;
 
+# Question and Answers
 
+1. To get length of text use length()
+2. Query the list of CITY names from STATION which have vowels (i.e., a, e, i, o, and u) as both their first and last
+   characters. Your result cannot contain duplicates.
+
+```sql
+SELECT DISTINCT CITY
+FROM STATION
+WHERE LOWER(SUBSTRING(CITY, 1, 1)) IN ('a', 'e', 'i', 'o', 'u')
+  AND LOWER(RIGHT(CITY, 1)) IN ('a', 'e', 'i', 'o', 'u');
+```
+
+3. Query the list of CITY names from STATION that do not start with vowels. Your result cannot contain duplicates.
+
+```sql
+select distinct city
+from station
+where lower(left(city, 1)) not in ('a', 'e', 'i', 'o', 'u');
+```
 
 
