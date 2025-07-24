@@ -237,6 +237,9 @@ INSERT INTO customers (first_name, last_name)
 SELECT 'FirstName_' || num,
        'LastName_' || num
 FROM generate_series(1, 100) AS num;
+
+select 'FirstName_' || num as first_name, 'LastName_' || num as last_name, num * 1000 as salary
+from generate_series(1, 100, 2) as num;
 ```
 
 2. Date Range Queries:
