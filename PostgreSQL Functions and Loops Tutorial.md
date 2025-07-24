@@ -20,16 +20,17 @@ PostgreSQL functions are created using the `CREATE FUNCTION` statement:
 
 ```sql
 CREATE
-OR REPLACE FUNCTION function_name(parameters)
-RETURNS return_type AS $$
+    OR REPLACE FUNCTION function_name(parameters)
+    RETURNS return_type AS
+$$
 DECLARE
     -- Variable declarations
 BEGIN
     -- Function logic
-RETURN value;
+    RETURN value;
 END;
 $$
-LANGUAGE plpgsql;
+    LANGUAGE plpgsql;
 ```
 
 ## Loop Types
@@ -40,21 +41,25 @@ The most basic loop that runs until an EXIT condition is met:
 
 ```sql
 CREATE
-OR REPLACE FUNCTION count_to_ten()
-RETURNS VOID AS $$
+    OR REPLACE FUNCTION count_to_ten()
+    RETURNS VOID AS
+$$
 DECLARE
-i INT := 1;
+    i INT := 1;
 BEGIN
     LOOP
-RAISE NOTICE 'Count: %', i;
+        RAISE NOTICE 'Count: %', i;
         i
-:= i + 1;
+            := i + 1;
         EXIT
-WHEN i > 10;
-END LOOP;
+            WHEN i > 10;
+    END LOOP;
 END;
 $$
-LANGUAGE plpgsql;
+    LANGUAGE plpgsql;
+
+select *
+from count_to_ten();
 ```
 
 ### WHILE LOOP
@@ -63,23 +68,25 @@ Runs while a condition is true:
 
 ```sql
 CREATE
-OR REPLACE FUNCTION factorial(n INT)
-RETURNS INT AS $$
+    OR REPLACE FUNCTION factorial(n INT)
+    RETURNS INT AS
+$$
 DECLARE
-result INT := 1;
+    result INT := 1;
     i
-INT := 1;
+           INT := 1;
 BEGIN
     WHILE
-i <= n LOOP
-        result := result * i;
-        i
-:= i + 1;
-END LOOP;
-RETURN result;
+        i <= n
+        LOOP
+            result := result * i;
+            i
+                := i + 1;
+        END LOOP;
+    RETURN result;
 END;
 $$
-LANGUAGE plpgsql;
+    LANGUAGE plpgsql;
 ```
 
 ### FOR LOOP
@@ -88,18 +95,78 @@ Iterates over a range:
 
 ```sql
 CREATE
-OR REPLACE FUNCTION sum_numbers()
-RETURNS INT AS $$
+    OR REPLACE FUNCTION sum_numbers()
+    RETURNS INT AS
+$$
 DECLARE
-total INT := 0;
+    total INT := 0;
 BEGIN
-FOR i IN 1..100 LOOP
-        total := total + i;
-END LOOP;
-RETURN total;
+    FOR i IN 1..100
+        LOOP
+            total := total + i;
+        END LOOP;
+    RETURN total;
 END;
 $$
-LANGUAGE plpgsql;
+    LANGUAGE plpgsql;
+```
+
+### Examples
+```sql
+create or replace function count_to_ten() returns void as
+$$
+declare
+    i int := 1;
+begin
+    loop
+        raise notice 'count : %',i;
+        i := i + 1;
+        exit when i > 10;
+    end loop;
+
+end;
+$$
+    language plpgsql;
+
+create or replace function factorial(n int) returns int as
+$$
+declare
+    result int := 1;
+    i      int := 1;
+begin
+    while i <= n
+        loop
+            result := result * i;
+            i := i + 1;
+        end loop;
+    return result;
+end;
+$$
+    language plpgsql;
+
+
+-- select * from count_to_ten();
+select *
+from factorial(10);
+
+create or replace function sun_till_100() returns int as
+$$
+declare
+    result int := 0;
+begin
+    for i in 1..100
+        loop
+            result := result + i;
+        end loop;
+    return result;
+end;
+$$
+    language plpgsql;
+
+-- select * from count_to_ten();
+select *
+from sun_till_100();
+
 ```
 
 ## Generating Series
@@ -116,7 +183,7 @@ PostgreSQL's built-in generate_series() function creates a set of rows containin
 
 ```sql
 generate_series
-(start, stop, step)
+    (start, stop, step)
 ```
 
 - start: First value in the series
@@ -175,12 +242,12 @@ FROM generate_series(1, 100) AS num;
 2. Date Range Queries:
 
 ```sql
-SELECT date, COALESCE (sales, 0) as sales
+SELECT date, COALESCE(sales, 0) as sales
 FROM generate_series(
-    '2023-01-01':: date, '2023-01-31':: date, '1 day':: interval
-    ) dates(date)
-    LEFT JOIN daily_sales
-ON dates.date = daily_sales.sale_date;
+             '2023-01-01':: date, '2023-01-31':: date, '1 day':: interval
+     ) dates(date)
+         LEFT JOIN daily_sales
+                   ON dates.date = daily_sales.sale_date;
 ```
 
 3. Number Tables for Calculations:
@@ -244,26 +311,26 @@ Here's a function that generates random customer data similar to your original q
 
 ```sql
 CREATE
-OR REPLACE FUNCTION generate_customers(num_rows INT)
-RETURNS VOID AS $$
+    OR REPLACE FUNCTION generate_customers(num_rows INT)
+    RETURNS VOID AS
+$$
 DECLARE
-i INT;
+    i INT;
     cities
-TEXT[] := ARRAY['Dhaka', 'Chittagong', 'Rajshahi', 'Khulna', 'Barisal', 'Sylhet', 'Rangpur', 'Mymensingh'];
+      TEXT[] := ARRAY ['Dhaka', 'Chittagong', 'Rajshahi', 'Khulna', 'Barisal', 'Sylhet', 'Rangpur', 'Mymensingh'];
 BEGIN
-FOR i IN 1..num_rows LOOP
-        INSERT INTO customers (first_name, last_name, email, phone, city)
-        VALUES (
-            'FirstName' || i,
-            'LastName' || i,
-            'user' || i || '@example.com',
-            '+8801' || LPAD((FLOOR(RANDOM() * 100000000))::TEXT, 8, '0'),
-            cities[1 + (RANDOM() * 7)::INT]
-        );
-END LOOP;
+    FOR i IN 1..num_rows
+        LOOP
+            INSERT INTO customers (first_name, last_name, email, phone, city)
+            VALUES ('FirstName' || i,
+                    'LastName' || i,
+                    'user' || i || '@example.com',
+                    '+8801' || LPAD((FLOOR(RANDOM() * 100000000))::TEXT, 8, '0'),
+                    cities[1 + (RANDOM() * 7)::INT]);
+        END LOOP;
 END;
 $$
-LANGUAGE plpgsql;
+    LANGUAGE plpgsql;
 
 -- Call the function to insert 100 records
 SELECT generate_customers(100);
@@ -276,22 +343,25 @@ You can use functions directly in SQL queries:
 ```sql
 -- Create a function that returns a table
 CREATE
-OR REPLACE FUNCTION get_customers_by_city(city_name TEXT)
-RETURNS TABLE (
-    id INT,
-    full_name TEXT,
-    contact TEXT
-) AS $$
+    OR REPLACE FUNCTION get_customers_by_city(city_name TEXT)
+    RETURNS TABLE
+            (
+                id        INT,
+                full_name TEXT,
+                contact   TEXT
+            )
+AS
+$$
 BEGIN
-RETURN QUERY
-SELECT customer_id,
-       first_name || ' ' || last_name,
-       phone || ' / ' || email
-FROM customers
-WHERE city = city_name;
+    RETURN QUERY
+        SELECT customer_id,
+               first_name || ' ' || last_name,
+               phone || ' / ' || email
+        FROM customers
+        WHERE city = city_name;
 END;
 $$
-LANGUAGE plpgsql;
+    LANGUAGE plpgsql;
 
 -- Use the function
 SELECT *
