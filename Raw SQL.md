@@ -284,4 +284,30 @@ from station
 where lower(left(city, 1)) not in ('a', 'e', 'i', 'o', 'u');
 ```
 
+## In
 
+The IN operator allows you to specify multiple values in a WHERE clause.
+
+The IN operator is a shorthand for multiple OR conditions.
+
+```sql
+SELECT *
+FROM Customers
+WHERE Country IN ('Germany', 'France', 'UK');
+```
+
+```sql
+SELECT *
+FROM Customers
+WHERE Country NOT IN ('Germany', 'France', 'UK');
+```
+
+```sql
+SELECT *
+FROM Customers
+WHERE CustomerID IN (SELECT CustomerID FROM Orders);
+
+SELECT *
+FROM Customers
+WHERE CustomerID NOT IN (SELECT CustomerID FROM Orders);
+```
