@@ -241,6 +241,28 @@ Aggregate functions ignore null values (except for COUNT(*)).
 >
 > select sum(salary) as salary from customers where salary > 20000;
 
+## Wildcards
+
+A wildcard character is used to substitute one or more characters in a string.
+
+Wildcard characters are used with the LIKE operator. The LIKE operator is used in a WHERE clause to search for a
+specified pattern in a column.
+
+```sql
+SELECT *
+FROM Customers
+WHERE CustomerName LIKE 'a%';
+```
+
+| Symbol | Description                                      | SQL Example                            | Matches                            |
+|--------|--------------------------------------------------|----------------------------------------|------------------------------------|
+| `%`    | Zero or more characters                          | `WHERE name LIKE 'A%'`                 | `'Alice'`, `'Andrew'`, `'A'`       |
+| `_`    | Exactly one character                            | `WHERE code LIKE 'H_t'`                | `'Hat'`, `'Hot'`, but not `'Heat'` |
+| `[]`   | Any one character inside brackets (SQL Server)   | `WHERE word LIKE 't[ae]st'`            | `'tast'`, `'test'`                 |
+| `[^]`  | Not any character inside brackets (SQL Server)   | `WHERE word LIKE 't[^ae]st'`           | `'tost'`, `'t1st'`, not `'test'`   |
+| `-`    | Range of characters inside brackets (SQL Server) | `WHERE word LIKE 't[a-c]t'`            | `'tat'`, `'tbt'`, `'tct'`          |
+| `{}`   | Escaped characters (SQL Server/Others)           | `WHERE note LIKE '100{%%}' ESCAPE '{'` | `'100%'`                           |
+
 # Question and Answers
 
 1. To get length of text use length()
