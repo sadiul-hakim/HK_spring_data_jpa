@@ -311,3 +311,67 @@ SELECT *
 FROM Customers
 WHERE CustomerID NOT IN (SELECT CustomerID FROM Orders);
 ```
+
+## The SQL BETWEEN Operator
+
+The BETWEEN operator selects values within a given range. The values can be numbers, text, or dates.
+
+The BETWEEN operator is inclusive: begin and end values are included.
+
+```sql
+SELECT column_name(s)
+FROM table_name
+WHERE column_name BETWEEN value1 AND value2;
+```
+
+## SQL Aliases
+
+SQL aliases are used to give a table, or a column in a table, a temporary name.
+
+Aliases are often used to make column names more readable.
+
+An alias only exists for the duration of that query.
+
+An alias is created with the AS keyword.
+
+```sql
+SELECT CustomerID AS ID
+FROM Customers;
+```
+
+### AS is Optional
+
+Actually, in most database languages, you can skip the AS keyword and get the same result:
+
+```sql
+SELECT CustomerID ID
+FROM Customers;
+```
+
+## The SQL UNION Operator
+
+The UNION operator is used to combine the result-set of two or more SELECT statements.
+
+- Every SELECT statement within UNION must have the same number of columns
+- The columns must also have similar data types
+- The columns in every SELECT statement must also be in the same order
+
+```sql
+SELECT column_name(s)
+FROM table1
+UNION
+SELECT column_name(s)
+FROM table2;
+```
+
+### UNION ALL Syntax
+
+The UNION operator selects only distinct/unique values by default. To allow duplicate values, use UNION ALL:
+
+```sql
+SELECT column_name(s)
+FROM table1
+UNION ALL
+SELECT column_name(s)
+FROM table2;
+```
