@@ -375,3 +375,83 @@ UNION ALL
 SELECT column_name(s)
 FROM table2;
 ```
+
+## The SQL HAVING Clause
+
+The HAVING clause was added to SQL because the WHERE keyword cannot be used with aggregate functions. Use it with
+`group by`
+
+```sql
+SELECT column_name(s)
+FROM table_name
+WHERE condition
+GROUP BY column_name(s)
+HAVING condition
+ORDER BY column_name(s);
+```
+
+```sql
+SELECT COUNT(CustomerID), Country
+FROM Customers
+GROUP BY Country
+HAVING COUNT(CustomerID) > 5;
+```
+
+## The SQL EXISTS Operator
+
+The EXISTS operator is used to test for the existence of any record in a subquery.
+
+The EXISTS operator returns TRUE if the subquery returns one or more records.
+
+```sql
+SELECT column_name(s)
+FROM table_name
+WHERE EXISTS
+              (SELECT column_name FROM table_name WHERE condition);
+```
+
+```sql
+SELECT SupplierName
+FROM Suppliers
+WHERE EXISTS (SELECT ProductName FROM Products WHERE Products.SupplierID = Suppliers.supplierID AND Price < 20);
+```
+
+### If `select customer_id customer, total from orders where total >= 1500` returns any row where exists becomes true
+
+    then select CONCAT(first_name, " ", last_name) name from customers executes
+
+```sql
+select CONCAT(first_name, " ", last_name) name
+from customers
+where exists (select customer_id customer, total from orders where total >= 1500);
+```
+
+## The SQL ANY and ALL Operators
+
+The ANY and ALL operators allow you to perform a comparison between a single column value and a range of other values.
+
+### The SQL ANY Operator
+
+The ANY operator:
+
+- returns a boolean value as a result
+- returns TRUE if ANY of the subquery values meet the condition
+  ANY means that the condition will be true if the operation is true for any of the values in the range.
+
+```sql
+SELECT column_name(s)
+FROM table_name
+WHERE column_name operator ANY
+(SELECT column_name
+ FROM table_name
+ WHERE condition);
+```
+
+### The SQL ALL Operator
+
+The ALL operator:
+
+- returns a boolean value as a result
+- returns TRUE if ALL of the subquery values meet the condition
+  is used with SELECT, WHERE and HAVING statements
+ALL means that the condition will be true only if the operation is true for all values in the range. 
