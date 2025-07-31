@@ -454,4 +454,90 @@ The ALL operator:
 - returns a boolean value as a result
 - returns TRUE if ALL of the subquery values meet the condition
   is used with SELECT, WHERE and HAVING statements
-ALL means that the condition will be true only if the operation is true for all values in the range. 
+  ALL means that the condition will be true only if the operation is true for all values in the range.
+
+## The SQL SELECT INTO Statement
+
+The SELECT INTO statement copies data from one table into a new table.
+
+### SELECT INTO Syntax (SQL Server (MSSQL) — NOT in MySQL)
+
+Copy all columns into a new table:
+
+```sql
+SELECT *
+INTO newtable [IN externaldb]
+FROM oldtable
+WHERE condition;
+```
+
+### MYSQL
+
+```sql
+create table order_summury select CONCAT
+(
+    c
+    .
+    first_name,
+    " ",
+    c
+    .
+    last_name
+) name,o.total,o.order_date from orders o inner join customers c on o.customer_id = c.id order by name asc;
+```
+
+## The SQL INSERT INTO SELECT Statement
+
+The INSERT INTO SELECT statement copies data from one table and inserts it into another table.
+
+The INSERT INTO SELECT statement requires that the data types in source and target tables match.
+
+Note: The existing records in the target table are unaffected.
+
+INSERT INTO SELECT Syntax
+
+```sql
+INSERT INTO table2
+SELECT *
+FROM table1
+WHERE condition;
+```
+
+## The SQL CASE Expression
+
+The CASE expression goes through conditions and returns a value when the first condition is met (like an if-then-else
+statement). So, once a condition is true, it will stop reading and return the result. If no conditions are true, it
+returns the value in the ELSE clause.
+
+If there is no ELSE part and no conditions are true, it returns NULL.
+
+```sql
+CASE
+    WHEN condition1 THEN result1
+    WHEN condition2 THEN result2
+    WHEN conditionN THEN resultN
+    ELSE result
+END;
+```
+
+EXAMPLE
+
+```sql
+SELECT CASE
+           WHEN G.GRADE >= 8 THEN S.NAME
+           ELSE 'NULL'
+           END AS NAME,
+       G.GRADE,
+       S.MARKS
+FROM STUDENTS S
+         JOIN GRADES G ON S.MARKS BETWEEN G.MIN_MARK AND G.MAX_MARK
+ORDER BY G.GRADE DESC,
+         CASE
+             WHEN G.GRADE >= 8 THEN S.NAME
+             ELSE NULL
+             END ASC,
+         CASE
+             WHEN G.GRADE < 8 THEN S.MARKS
+             ELSE NULL
+             END ASC;
+```
