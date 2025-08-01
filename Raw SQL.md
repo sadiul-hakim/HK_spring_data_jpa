@@ -541,3 +541,166 @@ ORDER BY G.GRADE DESC,
              ELSE NULL
              END ASC;
 ```
+
+## NULL functions - MySQl
+
+Suppose that a column is optional, and may contain NULL values.
+
+Look at the following SELECT statement:
+
+```sql
+SELECT ProductName, UnitPrice * (UnitsInStock + UnitsOnOrder)
+FROM Products;
+```
+
+In the example above, if any of the "UnitsOnOrder" values are NULL, the result will be NULL.
+
+### Solutions - MYSQL
+
+`The MySQL IFNULL() function lets you return an alternative value if an expression is NULL:`
+
+```sql
+SELECT ProductName, UnitPrice * (UnitsInStock + IFNULL(UnitsOnOrder, 0))
+FROM Products;
+```
+
+`or we can use the COALESCE() function, like this:`
+
+```sql
+SELECT ProductName, UnitPrice * (UnitsInStock + COALESCE(UnitsOnOrder, 0))
+FROM Products;
+```
+
+## What is a Stored Procedure?
+
+A stored procedure is a prepared SQL code that you can save, so the code can be reused over and over again.
+
+So if you have an SQL query that you write over and over again, save it as a stored procedure, and then just call it to
+execute it.
+
+You can also pass parameters to a stored procedure, so that the stored procedure can act based on the parameter value(s)
+that is passed.
+
+### Stored Procedure Syntax MYSQL
+
+```sql
+DELIMITER //
+
+CREATE PROCEDURE get_customer_orders()
+BEGIN
+    SELECT c.name  AS customer_name,
+           o.total AS order_total,
+           o.order_date,
+           p.product_name
+    FROM orders o
+             JOIN customers c ON o.customer_id = c.id
+             JOIN products p ON o.product_id = p.id;
+END //
+
+DELIMITER;
+
+```
+
+### Execute a Stored Procedure
+
+```sql
+call procedure_name;
+```
+
+### Example
+
+```sql
+DELIMITER //
+
+CREATE PROCEDURE orders_report()
+BEGIN
+    SELECT CONCAT(C.FIRST_NAME," ",C.LAST_NAME) CUSTOMER,P.NAME, O.TOTAL,O.CURRENCY,O.ORDER_DATE FROM orders O JOIN customers C ON O.CUSTOMER_ID = C.ID JOIN products P ON P.ID = O.PRODUCT_ID;
+END //
+
+DELIMITER ;
+```
+
+Execute the stored procedure above as follows:
+> CALL orders_report();
+
+### Stored Procedure With One Parameter mysql syntax
+```sql
+DELIMITER //
+
+CREATE PROCEDURE get_orders_by_customer(IN cust_id INT)
+BEGIN
+    SELECT c.name  AS customer_name,
+           o.total AS order_total,
+           o.order_date,
+           p.product_name
+    FROM orders o
+             JOIN customers c ON o.customer_id = c.id
+             JOIN products p ON o.product_id = p.id
+    WHERE o.customer_id = cust_id;
+END //
+
+DELIMITER;
+
+```
+
+```sql
+CALL get_orders_by_customer(3);
+```
+
+### Stored Procedure With Multiple Parameters
+
+```sql
+DELIMITER //
+
+CREATE PROCEDURE get_customer_orders_in_range(
+    IN cust_id INT,
+    IN start_date DATE,
+    IN end_date DATE
+)
+BEGIN
+    SELECT c.name  AS customer_name,
+           o.total AS order_total,
+           o.order_date,
+           p.product_name
+    FROM orders o
+             JOIN customers c ON o.customer_id = c.id
+             JOIN products p ON o.product_id = p.id
+    WHERE o.customer_id = cust_id
+      AND o.order_date BETWEEN start_date AND end_date;
+END //
+
+DELIMITER;
+
+```
+
+```sql
+CALL get_customer_orders_in_range(3, '2024-01-01', '2024-12-31');
+```
+
+## Comment
+### Single Line Comments
+Single line comments start with --.
+
+Any text between -- and the end of the line will be ignored (will not be executed).
+
+The following example uses a single-line comment as an explanation:
+
+```sql
+-- Select all:
+SELECT * FROM Customers;
+```
+
+### Multi-line Comments
+Multi-line comments start with /* and end with */.
+
+Any text between /* and */ will be ignored.
+
+The following example uses a multi-line comment as an explanation:
+
+```sql
+/*Select all the columns
+of all the records
+in the Customers table:*/
+SELECT *
+FROM Customers;
+```
